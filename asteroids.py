@@ -15,6 +15,7 @@ level_label = pyglet.text.Label(text="Version 1: Static Graphics", batch=main_ba
                                 x=resources.WIDTH / 2,
                                 y=resources.HEIGHT - 25, anchor_x='center')
 player_lives = []
+level_reached = 0
 # Set up the game over label offscreen
 game_over_label = pyglet.text.Label(text="GAME OVER",
                                     x=400, y=-300, anchor_x='center',
@@ -40,7 +41,7 @@ def init(dt=None):
 
 
 def reset_level(num_lives=3):
-    global player_ship, player_lives, game_objects, event_stack_size
+    global player_ship, player_lives, game_objects, event_stack_size, level_reached
 
     # Clear the event stack of any remaining handlers from other levels
     while event_stack_size > 0:
@@ -54,8 +55,8 @@ def reset_level(num_lives=3):
 
     player_lives = load.player_lives(num_lives, batch=main_batch)
 
-    asteroids = load.asteroids(num_asteroids, player_ship.position, batch=main_batch)
-
+    asteroids = load.asteroids(num_asteroids, player_ship.position, batch=main_batch, speed=40 + level_reached * 5)
+    level_label.text = f'Level {level_reached + 1}'
     game_objects = [player_ship] + asteroids
 
     for o in game_objects:
@@ -72,7 +73,7 @@ def on_draw():
 
 
 def update(dt):
-    global score, num_asteroids
+    global score, num_asteroids, level_reached
     player_dead = False
 
     asteroids_remaining = 0
@@ -108,6 +109,7 @@ def update(dt):
         num_asteroids += 1
         player_ship.delete()
         score += 10
+        level_reached += 1
         reset_level(len(player_lives))
 
 
