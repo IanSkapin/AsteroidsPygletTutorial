@@ -6,7 +6,7 @@ from .asteroid import Asteroid
 from .util import distance
 
 
-def asteroids(num_asteroids, player_position, batch=None):
+def asteroids(num_asteroids, player_position, batch=None, speed=40):
     populate_asteroids = []
     for i in range(num_asteroids):
         x, y = player_position
@@ -15,8 +15,8 @@ def asteroids(num_asteroids, player_position, batch=None):
             y = random.randint(0, HEIGHT)
         new_asteroid = Asteroid(x=x, y=y, batch=batch)
         new_asteroid.rotation = random.randint(0, 360)
-        new_asteroid.velocity_x = random.random() * 40
-        new_asteroid.velocity_y = random.random() * 40
+        new_asteroid.velocity_x = (random.random() - 0.5) * speed
+        new_asteroid.velocity_y = (random.random() - 0.5) * speed
         populate_asteroids.append(new_asteroid)
     return populate_asteroids
 
